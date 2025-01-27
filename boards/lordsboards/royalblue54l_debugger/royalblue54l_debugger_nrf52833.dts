@@ -17,7 +17,7 @@
 		status = "okay";
 		clk-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
 		dio-gpios = <&gpio0 28 GPIO_PULL_UP>;
-		reset-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio0 29 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
 		port-write-cycles = <2>;
 	};
 
@@ -26,6 +26,7 @@
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &slot0_partition;
 		zephyr,ieee802154 = &ieee802154;
+		uart,passthrough = &uart0;
 	};
 
 	aliases {
@@ -36,6 +37,7 @@
 &reg1 {
 	regulator-initial-mode = <NRF5X_REG_MODE_LDO>;
 };
+
 &uicr {
 	gpio-as-nreset;
 };
@@ -66,7 +68,6 @@
 };
 
 &flash0 {
-
 	partitions {
 		compatible = "fixed-partitions";
 		#address-cells = <1>;
@@ -94,4 +95,7 @@
 zephyr_udc0: &usbd {
 	compatible = "nordic,nrf-usbd";
 	status = "okay";
+	cdc_acm_uart: cdc_acm_uart {
+		compatible = "zephyr,cdc-acm-uart";
+	};
 };
